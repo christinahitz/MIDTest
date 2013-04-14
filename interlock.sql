@@ -49,6 +49,8 @@ DROP TABLE IF EXISTS `Interlock`.`Lessee` ;
 
 CREATE  TABLE IF NOT EXISTS `Interlock`.`Lessee` (
   `userID` INT NOT NULL ,
+  `fName` VARCHAR(45) NULL ,
+  `lName` VARCHAR(45) NULL ,
   `address` VARCHAR(255) NULL ,
   `homePhone` VARCHAR(25) NULL ,
   `mobilePhone` VARCHAR(25) NULL ,
@@ -127,19 +129,7 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`Device` (
   `lastDraegerServ` DATETIME NULL ,
   `leased` TINYINT(1) NULL ,
   `locationID` INT NULL COMMENT 'Could be located at dealer or customer' ,
-  PRIMARY KEY (`deviceID`) ,
-  INDEX `locationID_idx` (`locationID` ASC) ,
-  INDEX `serviceCenter_idx` (`locationID` ASC) ,
-  CONSTRAINT `lessee`
-    FOREIGN KEY (`locationID` )
-    REFERENCES `Interlock`.`Lessee` (`userID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `serviceCenter`
-    FOREIGN KEY (`locationID` )
-    REFERENCES `Interlock`.`ServiceCenter` (`servCenterID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`deviceID`) )
 ENGINE = InnoDB;
 
 
@@ -211,7 +201,6 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`Appointment` (
   `custID` INT NULL ,
   `date` DATETIME NULL ,
   `comment` VARCHAR(255) NULL ,
-  `Appointmentcol` VARCHAR(45) NULL ,
   PRIMARY KEY (`appID`) ,
   INDEX `Customer_idx` (`custID` ASC) ,
   INDEX `DealerID_idx` (`servCenterID` ASC) ,
