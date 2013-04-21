@@ -61,23 +61,41 @@ class TechnicianController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate()
-	{
-		$model=new Technician;
+        {
+            $tech=new Technician();
+            $user=new User;
+            
+            $user->save();
+            $tech->userID = $user->id;
+            $tech->user = $user;
+            
+            if(isset($_POST['Technician'], $_POST['User']))     // should redirect to update?
+            {
+                // populate input data to $tech and $user
+                $tech->attributes=$_POST['Technician'];
+                $user->attributes=$_POST['User'];
+                $user->role = Role::model()->findByAttributes(array('roleName'=>'TECHNICIAN'))->primaryKey;
+//                if($tech->servCenter)
+//                    {$tech->servCenterID = $tech->servCenter->primaryKey ?: null;}
+                    
+                // validate BOTH $a and $user
+                $valid=$tech->validate();
+                $valid=$user->validate() && $valid;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+                if($valid)
+                {
+                    // use false parameter to disable validation
+                    $tech->save(false);
+                    $user->save(false);
+                    $this->redirect(array('view','id'=>$tech->userID));
+                }
+            }
 
-		if(isset($_POST['Technician']))
-		{
-			$model->attributes=$_POST['Technician'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->userID));
-		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
-	}
+            $this->render('create', array(
+                'tech'=>$tech,
+                'user'=>$user,
+            ));
+        }
 
 	/**
 	 * Updates a particular model.
@@ -86,20 +104,35 @@ class TechnicianController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+                $user=  User::model()->findByPk($id);
+		$tech=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		// $this->performAjaxValidation($tech);
 
-		if(isset($_POST['Technician']))
-		{
-			$model->attributes=$_POST['Technician'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->userID));
-		}
+            if(isset($_POST['Technician'], $_POST['User']))
+            {
+                // populate input data to $a and $user
+                $tech->attributes=$_POST['Technician'];
+                $user->attributes=$_POST['User'];
+                $user->role = Role::model()->findByAttributes(array('roleName'=>'TECHNICIAN'))->primaryKey;
+                $tech->servCenterID = $_POST['servCenterID'];
+                
+                // validate BOTH $a and $user
+                $valid=$tech->validate();
+                $valid=$user->validate() && $valid;
+
+                if($valid)
+                {
+                    // use false parameter to disable validation
+                    $tech->save(false);
+                    $user->save(false);
+                    $this->redirect(array('view','id'=>$tech->userID));
+                }
+            }
 
 		$this->render('update',array(
-			'model'=>$model,
+			'tech'=>$tech, 'user'=> $user
 		));
 	}
 

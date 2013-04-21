@@ -32,6 +32,11 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'state'); ?>
+		<?php echo $form->textField($model,'state',array('size'=>2,'maxlength'=>2)); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'zip'); ?>
 		<?php echo $form->textField($model,'zip',array('size'=>45,'maxlength'=>45)); ?>
 	</div>

@@ -40,6 +40,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'state'); ?>
+		<?php echo $form->textField($model,'state',array('size'=>2,'maxlength'=>2)); ?>
+		<?php echo $form->error($model,'state'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'zip'); ?>
 		<?php echo $form->textField($model,'zip',array('size'=>45,'maxlength'=>45)); ?>
 		<?php echo $form->error($model,'zip'); ?>

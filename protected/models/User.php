@@ -4,16 +4,20 @@
  * This is the model class for table "user".
  *
  * The followings are the available columns in table 'user':
- * @property integer $userID
+ * @property integer $id
  * @property string $username
  * @property string $password
  * @property string $email
  * @property string $verification
- * @property string $role
+ * @property integer $role
+ * @property string $salt
+ * @property string $fName
+ * @property string $lName
  *
  * The followings are the available model relations:
  * @property Lessee $lessee
  * @property Technician $technician
+ * @property Role $role0
  */
 class User extends CActiveRecord
 {
@@ -43,11 +47,12 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, role', 'length', 'max'=>45),
-			array('password, email, verification', 'length', 'max'=>255),
+			array('role', 'numerical', 'integerOnly'=>true),
+			array('username, fName, lName', 'length', 'max'=>45),
+			array('password, email', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('userID, username, password, email, verification, role', 'safe', 'on'=>'search'),
+			array('id, username, email, role, fName, lName', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,6 +66,7 @@ class User extends CActiveRecord
 		return array(
 			'lessee' => array(self::HAS_ONE, 'Lessee', 'userID'),
 			'technician' => array(self::HAS_ONE, 'Technician', 'userID'),
+			'_role' => array(self::BELONGS_TO, 'Role', 'role'),
 		);
 	}
 
@@ -70,12 +76,15 @@ class User extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'userID' => 'User',
+			'id' => 'User ID',
 			'username' => 'Username',
 			'password' => 'Password',
 			'email' => 'Email',
 			'verification' => 'Verification',
 			'role' => 'Role',
+			'salt' => 'Salt',
+			'fName' => 'First Name',
+			'lName' => 'Last Name',
 		);
 	}
 
@@ -90,15 +99,29 @@ class User extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('userID',$this->userID);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
 		$criteria->compare('email',$this->email,true);
-		$criteria->compare('verification',$this->verification,true);
-		$criteria->compare('role',$this->role,true);
+		$criteria->compare('role',$this->role);
+		$criteria->compare('fName',$this->fName,true);
+		$criteria->compare('lName',$this->lName,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
+    
+        public function validatePassword($password)
+        {   // if password is plain text 'password', then use that.  (for bootstrapping)
+            if($this->password === 'password')
+                {return 'password';}
+            else
+                {return crypt($password,$this->password)===$this->password;}
+        }
+
+        public function hashPassword($password)
+        {
+            return crypt($password, $this->generateSalt());
+        }
 }

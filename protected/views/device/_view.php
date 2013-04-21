@@ -9,6 +9,10 @@
 	<?php echo CHtml::link(CHtml::encode($data->deviceID), array('view', 'id'=>$data->deviceID)); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('serialNum')); ?>:</b>
+	<?php echo CHtml::encode($data->serialNum); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('type')); ?>:</b>
 	<?php echo CHtml::encode($data->type); ?>
 	<br />
@@ -29,9 +33,11 @@
 	<?php echo CHtml::encode($data->leased); ?>
 	<br />
 
+	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('locationID')); ?>:</b>
 	<?php echo CHtml::encode($data->locationID); ?>
 	<br />
 
+	*/ ?>
 
 </div>

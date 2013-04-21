@@ -3,31 +3,26 @@
 /* @var $data Technician */
 ?>
 
-<div class="view">
+<div class="view">    
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('userID')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->userID), array('view', 'id'=>$data->userID)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('Username')); ?>:</b>
+	<?php echo CHtml::link(CHtml::encode($data->user->username), array('view', 'id'=>$data->userID)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('fName')); ?>:</b>
-	<?php echo CHtml::encode($data->fName); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('Name')); ?>:</b>
+	<?php echo (CHtml::encode($data->user->fName) . ' ' . CHtml::encode($data->user->lName)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('lName')); ?>:</b>
-	<?php echo CHtml::encode($data->lName); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
+	<?php echo CHtml::encode($data->user->email); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('phone')); ?>:</b>
 	<?php echo CHtml::encode($data->phone); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('servCenterID')); ?>:</b>
-	<?php echo CHtml::encode($data->servCenterID); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('Service Center')); ?>:</b>
+	<?php echo CHtml::encode($data->servCenter->name); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
-	<?php echo CHtml::encode($data->email); ?>
-	<br />
-
 
 </div>

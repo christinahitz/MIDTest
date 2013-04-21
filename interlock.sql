@@ -16,6 +16,7 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`ServiceCenter` (
   `name` VARCHAR(45) NULL ,
   `address` VARCHAR(45) NULL ,
   `city` VARCHAR(45) NULL ,
+  `state` VARCHAR(2) NULL ,
   `zip` VARCHAR(45) NULL ,
   `phone` VARCHAR(45) NULL ,
   `website` VARCHAR(45) NULL ,
@@ -26,19 +27,41 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `Interlock`.`Role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Interlock`.`Role` ;
+
+CREATE  TABLE IF NOT EXISTS `Interlock`.`Role` (
+  `roleID` INT NOT NULL AUTO_INCREMENT ,
+  `roleName` VARCHAR(45) NULL ,
+  PRIMARY KEY (`roleID`) ,
+  UNIQUE INDEX `roleName_UNIQUE` (`roleName` ASC) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `Interlock`.`User`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Interlock`.`User` ;
 
 CREATE  TABLE IF NOT EXISTS `Interlock`.`User` (
-  `userID` INT NOT NULL AUTO_INCREMENT ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `username` VARCHAR(45) NULL ,
   `password` VARCHAR(255) NULL ,
   `email` VARCHAR(255) NULL ,
   `verification` VARCHAR(255) NULL ,
-  `role` VARCHAR(45) NULL ,
-  PRIMARY KEY (`userID`) ,
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC) )
+  `role` INT NULL ,
+  `salt` VARCHAR(45) NULL ,
+  `fName` VARCHAR(45) NULL ,
+  `lName` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) ,
+  INDEX `role_idx` (`role` ASC) ,
+  CONSTRAINT `role`
+    FOREIGN KEY (`role` )
+    REFERENCES `Interlock`.`Role` (`roleID` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -49,8 +72,6 @@ DROP TABLE IF EXISTS `Interlock`.`Lessee` ;
 
 CREATE  TABLE IF NOT EXISTS `Interlock`.`Lessee` (
   `userID` INT NOT NULL ,
-  `fName` VARCHAR(45) NULL ,
-  `lName` VARCHAR(45) NULL ,
   `address` VARCHAR(255) NULL ,
   `homePhone` VARCHAR(25) NULL ,
   `mobilePhone` VARCHAR(25) NULL ,
@@ -68,7 +89,7 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`Lessee` (
     ON UPDATE NO ACTION,
   CONSTRAINT `lUserID`
     FOREIGN KEY (`userID` )
-    REFERENCES `Interlock`.`User` (`userID` )
+    REFERENCES `Interlock`.`User` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -95,11 +116,8 @@ DROP TABLE IF EXISTS `Interlock`.`Technician` ;
 
 CREATE  TABLE IF NOT EXISTS `Interlock`.`Technician` (
   `userID` INT NOT NULL ,
-  `fName` VARCHAR(45) NULL ,
-  `lName` VARCHAR(45) NULL ,
   `phone` VARCHAR(25) NULL ,
   `servCenterID` INT NULL ,
-  `email` VARCHAR(255) NULL ,
   PRIMARY KEY (`userID`) ,
   INDEX `DealerID_idx` (`servCenterID` ASC) ,
   INDEX `userID_idx` (`userID` ASC) ,
@@ -110,7 +128,7 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`Technician` (
     ON UPDATE NO ACTION,
   CONSTRAINT `tUserID`
     FOREIGN KEY (`userID` )
-    REFERENCES `Interlock`.`User` (`userID` )
+    REFERENCES `Interlock`.`User` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -123,13 +141,15 @@ DROP TABLE IF EXISTS `Interlock`.`Device` ;
 
 CREATE  TABLE IF NOT EXISTS `Interlock`.`Device` (
   `deviceID` INT NOT NULL ,
+  `serialNum` VARCHAR(45) NOT NULL ,
   `type` VARCHAR(45) NULL ,
   `lastCal` DATETIME NULL ,
   `lastServ` DATETIME NULL ,
   `lastDraegerServ` DATETIME NULL ,
   `leased` TINYINT(1) NULL ,
   `locationID` INT NULL COMMENT 'Could be located at dealer or customer' ,
-  PRIMARY KEY (`deviceID`) )
+  PRIMARY KEY (`deviceID`) ,
+  UNIQUE INDEX `serialNum_UNIQUE` (`serialNum` ASC) )
 ENGINE = InnoDB;
 
 

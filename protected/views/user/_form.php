@@ -34,15 +34,21 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'verification'); ?>
-		<?php echo $form->textField($model,'verification',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'verification'); ?>
+		<?php echo $form->labelEx($model,'role'); ?>
+		<?php echo $form->textField($model,'role'); ?>
+		<?php echo $form->error($model,'role'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'role'); ?>
-		<?php echo $form->textField($model,'role',array('size'=>45,'maxlength'=>45)); ?>
-		<?php echo $form->error($model,'role'); ?>
+		<?php echo $form->labelEx($model,'fName'); ?>
+		<?php echo $form->textField($model,'fName',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->error($model,'fName'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'lName'); ?>
+		<?php echo $form->textField($model,'lName',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->error($model,'lName'); ?>
 	</div>
 
 	<div class="row buttons">

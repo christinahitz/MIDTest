@@ -47,8 +47,6 @@ class Lessee extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('userID', 'required'),
-			array('userID, homeDealer', 'numerical', 'integerOnly'=>true),
 			array('address, Comment', 'length', 'max'=>255),
 			array('homePhone, mobilePhone', 'length', 'max'=>25),
 			array('discount', 'length', 'max'=>10),
@@ -69,7 +67,7 @@ class Lessee extends CActiveRecord
 		return array(
 			'appointments' => array(self::HAS_MANY, 'Appointment', 'custID'),
 			'invoices' => array(self::HAS_MANY, 'Invoice', 'lesseeID'),
-			'homeDealer0' => array(self::BELONGS_TO, 'Servicecenter', 'homeDealer'),
+			'_homeDealer' => array(self::BELONGS_TO, 'Servicecenter', 'homeDealer'),    // name collision, should have made column name homeDealerID
 			'user' => array(self::BELONGS_TO, 'User', 'userID'),
 		);
 	}

@@ -22,6 +22,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'serialNum'); ?>
+		<?php echo $form->textField($model,'serialNum',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->error($model,'serialNum'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'type'); ?>
 		<?php echo $form->textField($model,'type',array('size'=>45,'maxlength'=>45)); ?>
 		<?php echo $form->error($model,'type'); ?>

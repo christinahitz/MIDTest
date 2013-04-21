@@ -21,6 +21,10 @@
 	<?php echo CHtml::encode($data->city); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('state')); ?>:</b>
+	<?php echo CHtml::encode($data->state); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('zip')); ?>:</b>
 	<?php echo CHtml::encode($data->zip); ?>
 	<br />
@@ -29,11 +33,11 @@
 	<?php echo CHtml::encode($data->phone); ?>
 	<br />
 
+	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('website')); ?>:</b>
 	<?php echo CHtml::encode($data->website); ?>
 	<br />
 
-	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('fax')); ?>:</b>
 	<?php echo CHtml::encode($data->fax); ?>
 	<br />

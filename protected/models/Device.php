@@ -5,6 +5,7 @@
  *
  * The followings are the available columns in table 'device':
  * @property integer $deviceID
+ * @property string $serialNum
  * @property string $type
  * @property string $lastCal
  * @property string $lastServ
@@ -13,7 +14,6 @@
  * @property integer $locationID
  *
  * The followings are the available model relations:
- * @property Servicecenter $location
  * @property Invoice[] $invoices
  * @property Invoice[] $invoices1
  */
@@ -45,13 +45,13 @@ class Device extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('deviceID', 'required'),
+			array('deviceID, serialNum', 'required'),
 			array('deviceID, leased, locationID', 'numerical', 'integerOnly'=>true),
-			array('type', 'length', 'max'=>45),
+			array('serialNum, type', 'length', 'max'=>45),
 			array('lastCal, lastServ, lastDraegerServ', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('deviceID, type, lastCal, lastServ, lastDraegerServ, leased, locationID', 'safe', 'on'=>'search'),
+			array('deviceID, serialNum, type, lastCal, lastServ, lastDraegerServ, leased, locationID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,7 +63,6 @@ class Device extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'location' => array(self::BELONGS_TO, 'Servicecenter', 'locationID'),
 			'invoices' => array(self::HAS_MANY, 'Invoice', 'handsetID'),
 			'invoices1' => array(self::HAS_MANY, 'Invoice', 'controlboxID'),
 		);
@@ -76,6 +75,7 @@ class Device extends CActiveRecord
 	{
 		return array(
 			'deviceID' => 'Device',
+			'serialNum' => 'Serial Num',
 			'type' => 'Type',
 			'lastCal' => 'Last Cal',
 			'lastServ' => 'Last Serv',
@@ -97,6 +97,7 @@ class Device extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('deviceID',$this->deviceID);
+		$criteria->compare('serialNum',$this->serialNum,true);
 		$criteria->compare('type',$this->type,true);
 		$criteria->compare('lastCal',$this->lastCal,true);
 		$criteria->compare('lastServ',$this->lastServ,true);

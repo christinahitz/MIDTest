@@ -5,11 +5,8 @@
  *
  * The followings are the available columns in table 'technician':
  * @property integer $userID
- * @property string $fName
- * @property string $lName
  * @property string $phone
  * @property integer $servCenterID
- * @property string $email
  *
  * The followings are the available model relations:
  * @property Invoice[] $invoices
@@ -44,14 +41,10 @@ class Technician extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('userID', 'required'),
-			array('userID, servCenterID', 'numerical', 'integerOnly'=>true),
-			array('fName, lName', 'length', 'max'=>45),
 			array('phone', 'length', 'max'=>25),
-			array('email', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('userID, fName, lName, phone, servCenterID, email', 'safe', 'on'=>'search'),
+			array('userID, phone, servCenterID', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,12 +68,9 @@ class Technician extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'userID' => 'User',
-			'fName' => 'F Name',
-			'lName' => 'L Name',
+			'userID' => 'User ID',
 			'phone' => 'Phone',
-			'servCenterID' => 'Serv Center',
-			'email' => 'Email',
+			'servCenterID' => 'Service Center ID',
 		);
 	}
 
@@ -96,11 +86,8 @@ class Technician extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('userID',$this->userID);
-		$criteria->compare('fName',$this->fName,true);
-		$criteria->compare('lName',$this->lName,true);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('servCenterID',$this->servCenterID);
-		$criteria->compare('email',$this->email,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

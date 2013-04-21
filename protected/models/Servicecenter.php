@@ -8,6 +8,7 @@
  * @property string $name
  * @property string $address
  * @property string $city
+ * @property string $state
  * @property string $zip
  * @property string $phone
  * @property string $website
@@ -16,7 +17,6 @@
  *
  * The followings are the available model relations:
  * @property Appointment[] $appointments
- * @property Device[] $devices
  * @property Invoice[] $invoices
  * @property Lessee[] $lessees
  * @property Technician[] $technicians
@@ -52,10 +52,11 @@ class Servicecenter extends CActiveRecord
 			array('servCenterID', 'required'),
 			array('servCenterID', 'numerical', 'integerOnly'=>true),
 			array('name, address, city, zip, phone, website, fax', 'length', 'max'=>45),
+			array('state', 'length', 'max'=>2),
 			array('email', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('servCenterID, name, address, city, zip, phone, website, fax, email', 'safe', 'on'=>'search'),
+			array('servCenterID, name, address, city, state, zip, phone, website, fax, email', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,7 +69,6 @@ class Servicecenter extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'appointments' => array(self::HAS_MANY, 'Appointment', 'servCenterID'),
-			'devices' => array(self::HAS_MANY, 'Device', 'locationID'),
 			'invoices' => array(self::HAS_MANY, 'Invoice', 'servCenterID'),
 			'lessees' => array(self::HAS_MANY, 'Lessee', 'homeDealer'),
 			'technicians' => array(self::HAS_MANY, 'Technician', 'servCenterID'),
@@ -81,10 +81,11 @@ class Servicecenter extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'servCenterID' => 'Serv Center',
-			'name' => 'Name',
+			'servCenterID' => 'Service Center ID',
+			'name' => 'Service Center',
 			'address' => 'Address',
 			'city' => 'City',
+			'state' => 'State',
 			'zip' => 'Zip',
 			'phone' => 'Phone',
 			'website' => 'Website',
@@ -108,6 +109,7 @@ class Servicecenter extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('city',$this->city,true);
+		$criteria->compare('state',$this->state,true);
 		$criteria->compare('zip',$this->zip,true);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('website',$this->website,true);
