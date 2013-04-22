@@ -62,20 +62,20 @@ class UserController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new User;
+		$user=new User;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['User']))
 		{
-			$model->attributes=$_POST['User'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$user->attributes=$_POST['User'];
+			if($user->save())
+				$this->redirect(array('view','id'=>$user->userID));
 		}
 
 		$this->render('create',array(
-			'model'=>$model,
+			'user'=>$user,
 		));
 	}
 
@@ -95,7 +95,7 @@ class UserController extends Controller
 		{
 			$model->attributes=$_POST['User'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('view','id'=>$model->userID));
 		}
 
 		$this->render('update',array(

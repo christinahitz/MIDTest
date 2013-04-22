@@ -4,23 +4,21 @@
  * This is the model class for table "user".
  *
  * The followings are the available columns in table 'user':
- * @property integer $id
+ * @property integer $userID
  * @property string $username
  * @property string $password
  * @property string $email
  * @property string $verification
- * @property integer $role
- * @property string $salt
- * @property string $fName
- * @property string $lName
+ * @property string $role
  *
  * The followings are the available model relations:
  * @property Lessee $lessee
  * @property Technician $technician
- * @property Role $role0
  */
 class User extends CActiveRecord
 {
+    public $password;
+    public $password_repeat;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -47,12 +45,16 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('role', 'numerical', 'integerOnly'=>true),
-			array('username, fName, lName', 'length', 'max'=>45),
-			array('password, email', 'length', 'max'=>255),
+                        array('username', 'required'),
+                        array('username', 'unique'),
+                        array('password, password_repeat', 'required'),
+                     	array('username, role', 'length', 'max'=>45),
+			array('password, email, verification', 'length', 'max'=>255),
+                        array('password', 'compare', 'compareAttribute' => 'password_repeat'),
+                       
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, username, email, role, fName, lName', 'safe', 'on'=>'search'),
+			array('userID, username, password, email, verification, role', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,7 +68,6 @@ class User extends CActiveRecord
 		return array(
 			'lessee' => array(self::HAS_ONE, 'Lessee', 'userID'),
 			'technician' => array(self::HAS_ONE, 'Technician', 'userID'),
-			'_role' => array(self::BELONGS_TO, 'Role', 'role'),
 		);
 	}
 
@@ -76,15 +77,13 @@ class User extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'User ID',
+			'userID' => 'User',
 			'username' => 'Username',
 			'password' => 'Password',
+                        'password' => "Password Repeat",
 			'email' => 'Email',
 			'verification' => 'Verification',
 			'role' => 'Role',
-			'salt' => 'Salt',
-			'fName' => 'First Name',
-			'lName' => 'Last Name',
 		);
 	}
 
@@ -99,29 +98,52 @@ class User extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$criteria->compare('userID',$this->userID);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
 		$criteria->compare('email',$this->email,true);
-		$criteria->compare('role',$this->role);
-		$criteria->compare('fName',$this->fName,true);
-		$criteria->compare('lName',$this->lName,true);
+		$criteria->compare('verification',$this->verification,true);
+		$criteria->compare('role',$this->role,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-    
-        public function validatePassword($password)
-        {   // if password is plain text 'password', then use that.  (for bootstrapping)
-            if($this->password === 'password')
-                {return 'password';}
-            else
-                {return crypt($password,$this->password)===$this->password;}
-        }
-
-        public function hashPassword($password)
+        
+        public function hash($value)
         {
-            return crypt($password, $this->generateSalt());
+            return crypt($value);
+        }
+        
+        protected function beforeSave()
+        {
+            if (parent::beforeSave()){
+                $this->password = $this->hash($this->password);
+            return true;
+        }
+        return false;
+        }
+        
+        public function check($value){
+            $hash = crypt($value, $this->password);
+            if ($hash == $this->password) {
+                return true;
+            }
+            return false;
+        }
+        
+        public function passwordStrengthOk($attribute, $params)
+        {
+            //default to true
+            $value = true;
+            // at least one number
+            $valid = $valid && preg_match('/.*[\d].*/',$this->$attribute);
+            // at least one non-word character
+            $valid = $valid && preg_match('/.*W.*/', $this-$attribute);
+            // at least one capital letter
+            $valid = $valid && preg_match('/.*[A-Z.*/', $this->$attribute);
+            if (!$valid)$this->addError($attribute, "Does not meet password requirements.");
+            return $valid;           
+        
         }
 }
