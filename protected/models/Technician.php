@@ -14,7 +14,7 @@
  * @property User $user
  */
 class Technician extends CActiveRecord
-{
+{    
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -84,6 +84,9 @@ class Technician extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+                
+                $criteria->with[]='user';
+                $criteria->addSearchCondition("user.username",$this->userID);
 
 		$criteria->compare('userID',$this->userID);
 		$criteria->compare('phone',$this->phone,true);

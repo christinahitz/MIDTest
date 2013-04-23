@@ -1,12 +1,14 @@
 <?php
 /* @var $this TechnicianController */
 /* @var $model Technician */
+/* @var $user User */
 /* @var $form CActiveForm */
 ?>
 
 <div class="wide form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('CActiveForm', 
+        array(
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
 )); ?>
@@ -15,6 +17,12 @@
 		<?php echo $form->label($model,'userID'); ?>
 		<?php echo $form->textField($model,'userID'); ?>
 	</div>
+    
+    <div class="row">
+		<label for="user.username">Username</label>
+                <input size="25" maxlength="25" name="user.username" id="user.username" type="text" />
+    </div>
+
 
 	<div class="row">
 		<?php echo $form->label($model,'phone'); ?>

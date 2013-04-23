@@ -166,13 +166,20 @@ class TechnicianController extends Controller
 	 */
 	public function actionAdmin()
 	{
+                
 		$model=new Technician('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Technician']))
 			$model->attributes=$_GET['Technician'];
-
+                
+                $user = new User('search');
+                $user->unsetAttributes();  // clear any default values
+		if(isset($_GET['User']))
+			$user->attributes=$_GET['User'];
+                
 		$this->render('admin',array(
 			'model'=>$model,
+                        'user' =>$user,
 		));
 	}
 
