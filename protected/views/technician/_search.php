@@ -17,12 +17,6 @@
 		<?php echo $form->label($model,'userID'); ?>
 		<?php echo $form->textField($model,'userID'); ?>
 	</div>
-    
-    <div class="row">
-		<label for="user.username">Username</label>
-                <input size="25" maxlength="25" name="user.username" id="user.username" type="text" />
-    </div>
-
 
 	<div class="row">
 		<?php echo $form->label($model,'phone'); ?>
