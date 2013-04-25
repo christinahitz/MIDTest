@@ -2,16 +2,16 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-DROP SCHEMA IF EXISTS `Interlock` ;
-CREATE SCHEMA IF NOT EXISTS `Interlock` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `Interlock` ;
+DROP SCHEMA IF EXISTS `interlock` ;
+CREATE SCHEMA IF NOT EXISTS `interlock` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `interlock` ;
 
 -- -----------------------------------------------------
--- Table `Interlock`.`ServiceCenter`
+-- Table `interlock`.`serviceCenter`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`ServiceCenter` ;
+DROP TABLE IF EXISTS `interlock`.`serviceCenter` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`ServiceCenter` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`serviceCenter` (
   `servCenterID` INT NOT NULL ,
   `name` VARCHAR(45) NULL ,
   `address` VARCHAR(45) NULL ,
@@ -27,11 +27,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Interlock`.`Role`
+-- Table `interlock`.`role`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`Role` ;
+DROP TABLE IF EXISTS `interlock`.`role` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`Role` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`role` (
   `roleID` INT NOT NULL AUTO_INCREMENT ,
   `roleName` VARCHAR(45) NULL ,
   PRIMARY KEY (`roleID`) ,
@@ -40,11 +40,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Interlock`.`User`
+-- Table `interlock`.`user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`User` ;
+DROP TABLE IF EXISTS `interlock`.`user` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`User` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `username` VARCHAR(45) NULL ,
   `password` VARCHAR(255) NULL ,
@@ -59,18 +59,18 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`User` (
   INDEX `role_idx` (`role` ASC) ,
   CONSTRAINT `role`
     FOREIGN KEY (`role` )
-    REFERENCES `Interlock`.`Role` (`roleID` )
+    REFERENCES `interlock`.`role` (`roleID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Interlock`.`Lessee`
+-- Table `interlock`.`lessee`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`Lessee` ;
+DROP TABLE IF EXISTS `interlock`.`lessee` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`Lessee` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`lessee` (
   `userID` INT NOT NULL ,
   `address` VARCHAR(255) NULL ,
   `homePhone` VARCHAR(25) NULL ,
@@ -84,23 +84,23 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`Lessee` (
   INDEX `userID_idx` (`userID` ASC) ,
   CONSTRAINT `HomeDealer`
     FOREIGN KEY (`homeDealer` )
-    REFERENCES `Interlock`.`ServiceCenter` (`servCenterID` )
+    REFERENCES `interlock`.`serviceCenter` (`servCenterID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `lUserID`
+  CONSTRAINT `luserID`
     FOREIGN KEY (`userID` )
-    REFERENCES `Interlock`.`User` (`id` )
+    REFERENCES `interlock`.`user` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Interlock`.`ServiceType`
+-- Table `interlock`.`serviceType`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`ServiceType` ;
+DROP TABLE IF EXISTS `interlock`.`serviceType` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`ServiceType` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`serviceType` (
   `servID` INT NOT NULL ,
   `desc` VARCHAR(255) NULL ,
   `price` DECIMAL(5,2) NULL ,
@@ -110,11 +110,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Interlock`.`Technician`
+-- Table `interlock`.`technician`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`Technician` ;
+DROP TABLE IF EXISTS `interlock`.`technician` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`Technician` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`technician` (
   `userID` INT NOT NULL ,
   `phone` VARCHAR(25) NULL ,
   `servCenterID` INT NULL ,
@@ -123,23 +123,23 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`Technician` (
   INDEX `userID_idx` (`userID` ASC) ,
   CONSTRAINT `techDealer`
     FOREIGN KEY (`servCenterID` )
-    REFERENCES `Interlock`.`ServiceCenter` (`servCenterID` )
+    REFERENCES `interlock`.`serviceCenter` (`servCenterID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `tUserID`
+  CONSTRAINT `tuserID`
     FOREIGN KEY (`userID` )
-    REFERENCES `Interlock`.`User` (`id` )
+    REFERENCES `interlock`.`user` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Interlock`.`Device`
+-- Table `interlock`.`device`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`Device` ;
+DROP TABLE IF EXISTS `interlock`.`device` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`Device` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`device` (
   `deviceID` INT NOT NULL ,
   `serialNum` VARCHAR(45) NOT NULL ,
   `type` VARCHAR(45) NULL ,
@@ -154,11 +154,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Interlock`.`Invoice`
+-- Table `interlock`.`invoice`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`Invoice` ;
+DROP TABLE IF EXISTS `interlock`.`invoice` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`Invoice` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`invoice` (
   `invoiceNum` INT NOT NULL AUTO_INCREMENT ,
   `serviceDate` DATE NOT NULL ,
   `servTypeID` INT NOT NULL ,
@@ -174,48 +174,48 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`Invoice` (
   INDEX `ServiceID_idx` (`servTypeID` ASC) ,
   INDEX `CustomerID_idx` (`lesseeID` ASC) ,
   INDEX `DealerID_idx` (`servCenterID` ASC) ,
-  INDEX `TechnicianID_idx` (`techID` ASC) ,
+  INDEX `technicianID_idx` (`techID` ASC) ,
   INDEX `HandsetID_idx` (`handsetID` ASC) ,
   INDEX `ControlboxID_idx` (`controlboxID` ASC) ,
   CONSTRAINT `ServiceID`
     FOREIGN KEY (`servTypeID` )
-    REFERENCES `Interlock`.`ServiceType` (`servID` )
+    REFERENCES `interlock`.`serviceType` (`servID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `lesseeID`
     FOREIGN KEY (`lesseeID` )
-    REFERENCES `Interlock`.`Lessee` (`userID` )
+    REFERENCES `interlock`.`lessee` (`userID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `DealerID`
     FOREIGN KEY (`servCenterID` )
-    REFERENCES `Interlock`.`ServiceCenter` (`servCenterID` )
+    REFERENCES `interlock`.`serviceCenter` (`servCenterID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `TechnicianID`
+  CONSTRAINT `technicianID`
     FOREIGN KEY (`techID` )
-    REFERENCES `Interlock`.`Technician` (`userID` )
+    REFERENCES `interlock`.`technician` (`userID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `HandsetID`
     FOREIGN KEY (`handsetID` )
-    REFERENCES `Interlock`.`Device` (`deviceID` )
+    REFERENCES `interlock`.`device` (`deviceID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `ControlboxID`
     FOREIGN KEY (`controlboxID` )
-    REFERENCES `Interlock`.`Device` (`deviceID` )
+    REFERENCES `interlock`.`device` (`deviceID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Interlock`.`Appointment`
+-- Table `interlock`.`appointment`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Interlock`.`Appointment` ;
+DROP TABLE IF EXISTS `interlock`.`appointment` ;
 
-CREATE  TABLE IF NOT EXISTS `Interlock`.`Appointment` (
+CREATE  TABLE IF NOT EXISTS `interlock`.`appointment` (
   `appID` INT NOT NULL AUTO_INCREMENT ,
   `servCenterID` INT NULL ,
   `custID` INT NULL ,
@@ -226,12 +226,12 @@ CREATE  TABLE IF NOT EXISTS `Interlock`.`Appointment` (
   INDEX `DealerID_idx` (`servCenterID` ASC) ,
   CONSTRAINT `appointmentDealer`
     FOREIGN KEY (`servCenterID` )
-    REFERENCES `Interlock`.`ServiceCenter` (`servCenterID` )
+    REFERENCES `interlock`.`serviceCenter` (`servCenterID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `appointmentCustomer`
     FOREIGN KEY (`custID` )
-    REFERENCES `Interlock`.`Lessee` (`userID` )
+    REFERENCES `interlock`.`lessee` (`userID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
