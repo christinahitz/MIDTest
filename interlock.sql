@@ -2,9 +2,6 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-DROP SCHEMA IF EXISTS `interlock` ;
-CREATE SCHEMA IF NOT EXISTS `interlock` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `interlock` ;
 
 -- -----------------------------------------------------
 -- Table `interlock`.`serviceCenter`
@@ -32,11 +29,17 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `interlock`.`role` ;
 
 CREATE  TABLE IF NOT EXISTS `interlock`.`role` (
-  `roleID` INT NOT NULL AUTO_INCREMENT ,
+  `roleID` INT NOT NULL ,
   `roleName` VARCHAR(45) NULL ,
   PRIMARY KEY (`roleID`) ,
   UNIQUE INDEX `roleName_UNIQUE` (`roleName` ASC) )
 ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+
+INSERT INTO `role` (`roleID`, `roleName`) VALUES
+(1, 'ADMIN'),
+(2, 'TECHNICIAN');
 
 
 -- -----------------------------------------------------
@@ -82,12 +85,12 @@ CREATE  TABLE IF NOT EXISTS `interlock`.`lessee` (
   PRIMARY KEY (`userID`) ,
   INDEX `HomeDealer_idx` (`homeDealer` ASC) ,
   INDEX `userID_idx` (`userID` ASC) ,
-  CONSTRAINT `HomeDealer`
+  CONSTRAINT `homeDealer`
     FOREIGN KEY (`homeDealer` )
     REFERENCES `interlock`.`serviceCenter` (`servCenterID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `luserID`
+  CONSTRAINT `lUserID`
     FOREIGN KEY (`userID` )
     REFERENCES `interlock`.`user` (`id` )
     ON DELETE NO ACTION
@@ -126,7 +129,7 @@ CREATE  TABLE IF NOT EXISTS `interlock`.`technician` (
     REFERENCES `interlock`.`serviceCenter` (`servCenterID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `tuserID`
+  CONSTRAINT `tUserID`
     FOREIGN KEY (`userID` )
     REFERENCES `interlock`.`user` (`id` )
     ON DELETE NO ACTION
@@ -174,10 +177,10 @@ CREATE  TABLE IF NOT EXISTS `interlock`.`invoice` (
   INDEX `ServiceID_idx` (`servTypeID` ASC) ,
   INDEX `CustomerID_idx` (`lesseeID` ASC) ,
   INDEX `DealerID_idx` (`servCenterID` ASC) ,
-  INDEX `technicianID_idx` (`techID` ASC) ,
+  INDEX `TechnicianID_idx` (`techID` ASC) ,
   INDEX `HandsetID_idx` (`handsetID` ASC) ,
   INDEX `ControlboxID_idx` (`controlboxID` ASC) ,
-  CONSTRAINT `ServiceID`
+  CONSTRAINT `serviceID`
     FOREIGN KEY (`servTypeID` )
     REFERENCES `interlock`.`serviceType` (`servID` )
     ON DELETE NO ACTION
@@ -187,7 +190,7 @@ CREATE  TABLE IF NOT EXISTS `interlock`.`invoice` (
     REFERENCES `interlock`.`lessee` (`userID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `DealerID`
+  CONSTRAINT `dealerID`
     FOREIGN KEY (`servCenterID` )
     REFERENCES `interlock`.`serviceCenter` (`servCenterID` )
     ON DELETE NO ACTION
@@ -197,12 +200,12 @@ CREATE  TABLE IF NOT EXISTS `interlock`.`invoice` (
     REFERENCES `interlock`.`technician` (`userID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `HandsetID`
+  CONSTRAINT `handsetID`
     FOREIGN KEY (`handsetID` )
     REFERENCES `interlock`.`device` (`deviceID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `ControlboxID`
+  CONSTRAINT `controlboxID`
     FOREIGN KEY (`controlboxID` )
     REFERENCES `interlock`.`device` (`deviceID` )
     ON DELETE NO ACTION
