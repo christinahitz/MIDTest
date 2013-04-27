@@ -36,13 +36,21 @@
                     'items' => array(// EXAMPLE shows how to show ONLY if user role is TECHNICIAN or ADMIN           
                         array('label' => 'Admin', 'url' => array('/site/index'),
                             'items'=>array(
+                                array('label' => 'Appointment', 'url' => array('/appointment/index')),
+                                array('label' => 'Device', 'url' => array('/device/index')),
+                                array('label' => 'Invoice', 'url' => array('/invoice/index')),
+                                array('label' => 'Lessee', 'url' => array('/lessee/index')),
                                 array('label' => 'Technician', 'url' => array('/technician/index')),
-                             ),
+                                array('label' => 'Service Center', 'url' => array('/servicecenter/index')),
+                                array('label' => 'Service Type', 'url' => array('/servicetype/index')),
+                                array('label' => 'User', 'url' => array('/user/index')),
+                                
+                             ),'visible' => Yii::app()->user->checkAccess('ADMIN')
                       ),  
-                        array('label' => 'Technicain', 'url'=> array('/site/index'),
+                        array('label' => 'Technician', 'url'=> array('/site/index'),
                              'items' => array(
                                  array('label' => 'Lesse', 'url' => array('/lessee/index')),
-                             ), 'visible' => Yii::app()->user->checkAccess('ADMIN')),
+                             ), 'visible' => !Yii::app()->user->isGuest),
                         
                         array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
                         array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest)
